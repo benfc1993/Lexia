@@ -1,0 +1,22 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    line-height: 1.8rem;
+}
+
+.hl-new-scentence {
+    color: rgb(66 229 171);
+    font-size: 1.3rem; 
+}
+.hl-conjunction {
+    color: rgb(253 202 0);
+}
+.hl-preposition {
+    color: rgb(198 63 136);
+}
+.hl-punctuation {
+    color: rgb(141 255 0);
+    font-size: 1.3rem; 
+}
