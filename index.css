@@ -1,22 +1,83 @@
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     font-size: 1.2rem;
+    background: rgb(25 25 25);
+    color:rgb(235 219 178);
     line-height: 1.8rem;
 }
-
-.hl-new-scentence {
-    color: rgb(66 229 171);
-    font-size: 1.3rem; 
+.options {
+    display: flex;
+}
+.hl-first {
+    color: rgb(131 165 152);
+   /* font-size: 1.3rem;  */
 }
 .hl-conjunction {
-    color: rgb(253 202 0);
+    color: rgb(184 187 38);
 }
 .hl-preposition {
-    color: rgb(198 63 136);
+    color: rgb(211 134 155);
+}
+.hl-center {
+    color: rgb(250 189 47);
 }
 .hl-punctuation {
-    color: rgb(141 255 0);
-    font-size: 1.3rem; 
+    color: rgb(250 189 47);
+    /* font-size: 1.3rem;  */
 }
+
+.line {
+    width: fit-content;
+    padding-right: 0.6rem;
+}
+
+.b-start {
+    border-left: solid 1px;
+}
+
+.b-start-0 {
+    border-left-color: green;
+}
+
+
+.b-start-1 {
+    border-left-color: blueviolet;
+}
+
+
+.b-start-2 {
+    border-left-color: yellowgreen;
+}
+
+
+.b-start-3 {
+    border-left-color: red;
+}
+
+b-line {
+    border-bottom: solid 1px;
+    border-right: solid 1px;
+}
+
+.b-line-0 {
+    border-left-color: red;
+}
+
+.b-line-1 {
+    border-left-color: green;
+}
+
+
+.b-line-2 {
+    border-left-color: blueviolet;
+}
+
+
+.b-line-3 {
+    border-left-color: yellowgreen;
+}
+
+
