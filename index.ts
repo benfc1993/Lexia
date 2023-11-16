@@ -143,7 +143,6 @@ function parser(tokens: Token[]) {
     return tokens.map((token, idx) => {
         const highlights: string[] = []
         if (token.type === HlClass.NewLine) {
-            console.log('newline')
             highlights.push(`</span>`)
             highlights.push(token.text)
             if (idx !== tokens.length - 1) {
@@ -173,11 +172,9 @@ function parser(tokens: Token[]) {
 
         if (remainder.length) highlights.push(remainder)
         const finalText = highlights.join('')
-        const result = (idx === 0 ? `<span class='line b-line b-line-${lineIndex}'>` : '') + (token.type === HlClass.None ||
+        return (idx === 0 ? `<span class='line b-line b-line-${lineIndex}'>` : '') + (token.type === HlClass.None ||
             !(document.getElementById('hl-' + token.type) as HTMLInputElement)!.checked ? finalText :
             highlightWrap(finalText, token.type))
-        console.log(result)
-        return result
     }).join(' ')
 }
 
