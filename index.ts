@@ -4,6 +4,7 @@ import { prepositions } from "./dictionary/prepositions"
 
 enum HlClass {
     None = '',
+    NewLine = 'newline',
     First = 'first',
     Conjunction = 'conjunction',
     Preposition = 'preposition',
@@ -119,7 +120,7 @@ function lexer(element: Element, str: string) {
         }
         elementTokens.push(wordToken)
 
-        if (idx > 0 && idx % lineLength === 0) elementTokens.push(createToken(HlClass.None, '</br>', 0, false))
+        if (idx > 0 && idx % lineLength === 0) elementTokens.push(createToken(HlClass.NewLine, '</br>', 0, false))
         idx++
     }
     tokensMap.set(element, elementTokens)
@@ -136,8 +137,21 @@ function createToken(type: HlClass, text: string, position: number, scentanceSta
     }
 }
 function parser(tokens: Token[]) {
-    return tokens.map((token) => {
+    let lineIndex = 0
+    const test = tokens.map((token, idx) => {
         const highlights: string[] = []
+        if (token.type === HlClass.NewLine) {
+            console.log('newline')
+            highlights.push(`</span>`)
+            highlights.push(token.text)
+            if (idx !== tokens.length - 1) {
+                const prevLineIdx = lineIndex
+                lineIndex++
+                lineIndex %= 4
+                highlights.push(`<span class='line b-start b-start-${prevLineIdx} b-line b-line-${lineIndex}'>`)
+            }
+            return highlights.join('')
+        }
         if (!token.hasChildren()) return highlightWrap(token.text, token.type)
         const children = token.children!.sort((a, b) => a.position - b.position)
 
@@ -157,8 +171,16 @@ function parser(tokens: Token[]) {
 
         if (remainder.length) highlights.push(remainder)
         const finalText = highlights.join('')
-        return token.type === HlClass.None || !(document.getElementById('hl - ' + token.type) as HTMLInputElement)!.checked ? finalText : highlightWrap(finalText, token.type)
+        const result = (idx === 0 ? `<span class='line b-line b-line-${lineIndex}'>` : '') + (token.type === HlClass.None ||
+            !(document.getElementById('hl-' + token.type) as HTMLInputElement)!.checked ? finalText :
+            highlightWrap(finalText, token.type))
+        console.log(result)
+        return result
     }).join(' ')
+    console.log(test)
+    return test
+
+
 }
 
 function highlightWrap(string: string, hlClass: string) {
