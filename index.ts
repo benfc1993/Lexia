@@ -16,7 +16,7 @@ const main = () => {
     const div = document.getElementById('text')
     if (!div) return
     for (const child of div.children) {
-        base.set(child, child.textContent ?? '')
+        base.set(child, child.innerHTML.toString() ?? '')
     }
 }
 
