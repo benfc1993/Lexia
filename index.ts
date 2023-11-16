@@ -14,7 +14,9 @@ enum HlClass {
 const base: Map<Element, string> = new Map()
 const main = () => {
     const div = document.getElementById('text')
+
     if (!div) return
+
     for (const child of div.children) {
         base.set(child, child.innerHTML.toString() ?? '')
     }
@@ -138,7 +140,7 @@ function createToken(type: HlClass, text: string, position: number, scentanceSta
 }
 function parser(tokens: Token[]) {
     let lineIndex = 0
-    const test = tokens.map((token, idx) => {
+    return tokens.map((token, idx) => {
         const highlights: string[] = []
         if (token.type === HlClass.NewLine) {
             console.log('newline')
@@ -177,10 +179,6 @@ function parser(tokens: Token[]) {
         console.log(result)
         return result
     }).join(' ')
-    console.log(test)
-    return test
-
-
 }
 
 function highlightWrap(string: string, hlClass: string) {
