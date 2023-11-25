@@ -5,15 +5,20 @@ body {
     align-items: center;
     font-size: 1.2rem;
     background: rgb(25 25 25);
-    color:rgb(235 219 178);
+    /* color:rgb(235 219 178); */
+    color: #3f3f3f;
     line-height: 1.8rem;
+}
+span {
+    transition: 0.2s cubic-bezier(0.39, 0.75, 0.54, 0.98);
 }
 .options {
     display: flex;
 }
+
 .hl-first {
     color: rgb(131 165 152);
-   /* font-size: 1.3rem;  */
+    /* font-size: 1.3rem;  */
 }
 .hl-conjunction {
     color: rgb(184 187 38);
@@ -38,23 +43,20 @@ body {
 
 .b-start {
     border-left: solid 1px;
-    padding-left: 0.6rem
+    padding-left: 0.6rem;
 }
 
 .b-start-0 {
     border-left-color: rgb(131 165 152);
 }
 
-
 .b-start-1 {
     border-left-color: rgb(184 187 38);
 }
 
-
 .b-start-2 {
     border-left-color: rgb(211 134 155);
 }
-
 
 .b-start-3 {
     border-left-color: rgb(250 189 47);
@@ -65,18 +67,15 @@ body {
     /* border-right: solid 1px; */
 }
 
-
 .b-line-0 {
     border-bottom-color: rgb(131 165 152);
     border-right-color: rgb(131 165 152);
 }
 
-
 .b-line-1 {
     border-bottom-color: rgb(184 187 38);
     border-right-color: rgb(184 187 38);
 }
-
 
 .b-line-2 {
     border-bottom-color: rgb(211 134 155);
@@ -87,4 +86,70 @@ body {
     border-bottom-color: rgb(250 189 47);
     border-right-color: rgb(250 189 47);
 }
+.scroll-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #222;
+}
 
+.scroll-container {
+    background: #222;
+    width: 30%;
+    height: 3rem;
+    padding: 0 3rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    position: relative;
+}
+
+.scroll-slide {
+    position: absolute;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-wrap: nowrap;
+    font-size: 1.5rem;
+    color: #818181;
+}
+
+.scroll-highlight {
+    color: #fff;
+    transition: color 0.1s ease-out;
+}
+.pause {
+    background: #6161616e;
+    width: 3rem;
+    height: 3rem;
+    position: absolute;
+    border-radius: 5px;
+    margin-top: 5rem;
+    opacity: 0;
+    transition: opacity 0.1s ease-out;
+}
+.pause::before {
+    content: '';
+    position: absolute;
+    background: linear-gradient(
+        to right,
+        #fff,
+        #fff 25%,
+        rgba(0, 0, 0, 0) 25%,
+        rgba(0, 0, 0, 0) 75%,
+        #fff 75%
+    );
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
+    left: 5px;
+}
+
+.pause.show {
+    opacity: 1;
+}
