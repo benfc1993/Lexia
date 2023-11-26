@@ -1,13 +1,6 @@
 import { storage } from '../storage/localStorage'
 
-export let paused = false
-
-export function pause() {
-    paused = !paused
-    document.getElementById('lexia-scroll-pause')?.classList.toggle('show')
-}
-
-export const defaults = {
+const defaults = {
     wps: 9,
     commaRest: 100,
     fullStopRest: 250,
@@ -18,6 +11,7 @@ export const defaults = {
     highlightColor: '#ffffff',
     pauseOnNavigate: true,
 }
+
 export const options = {
     wps: 9,
     commaRest: 100,

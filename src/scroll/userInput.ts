@@ -1,47 +1,46 @@
+import { ticker } from './ticker'
+
 export function initialiseUserInput() {
-    document.addEventListener(
-        'keydown',
-        function(e: KeyboardEvent) {
-            let jump = 0
-            switch (e.key) {
-                case 'ArrowLeft':
-                    e.preventDefault()
-                    if (progress.currentLine === 0) return
+    document.addEventListener('keydown', function (e: KeyboardEvent) {
+        switch (e.key) {
+            case ' ':
+                e.preventDefault()
+                ticker.pause()
+                break
+            case 'o':
+            case 'O':
+                e.preventDefault()
+                document
+                    .getElementById('lexia-scroll-options')
+                    ?.classList.toggle('hide')
+                break
+            default:
+                return
+        }
+    })
+    document.addEventListener('keydown', function (e: KeyboardEvent) {
+        switch (e.key) {
+            case 'ArrowLeft':
+                e.preventDefault()
+                ticker.jumpLine(-1)
+                break
+            case 'ArrowRight':
+                e.preventDefault()
 
-                    jump = progress.currentLine - 1
-                    break
-                case 'ArrowRight':
-                    e.preventDefault()
-
-                    if (progress.currentLine >= lines.length - 1) return
-                    jump = progress.currentLine + 1
-
-                    break
-                case 'ArrowUp': {
-                    e.preventDefault()
-                    const paragraphIndex = Math.max(
-                        0,
-                        lines[progress.currentLine].paragraph - 1,
-                    )
-                    jump = paragraphs[paragraphIndex]
-
-                    break
-                }
-                case 'ArrowDown': {
-                    e.preventDefault()
-                    const paragraphIndex = Math.min(
-                        lines[progress.currentLine].paragraph + 1,
-                        paragraphs.length - 1,
-                    )
-                    jump = paragraphs[paragraphIndex]
-
-                    break
-                }
-                default:
-                    return
+                ticker.jumpLine(1)
+                break
+            case 'ArrowUp': {
+                e.preventDefault()
+                ticker.jumpParagraph(-1)
+                break
             }
-            if (!paused && options.pauseOnNavigate) pause()
-            setParagraph(scrollContainer, jump, lines, options.newParagraphRest)
-        }.bind(progress),
-    )
+            case 'ArrowDown': {
+                e.preventDefault()
+                ticker.jumpParagraph(1)
+                break
+            }
+            default:
+                return
+        }
+    })
 }

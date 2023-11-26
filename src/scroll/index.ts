@@ -1,7 +1,8 @@
-import { assignDefaults, options, pause } from './data'
+import { assignDefaults, options } from './data'
 import { createLayout } from './layout'
-import { ticker } from './loop'
+import { loop } from './loop'
 import { Line } from './types'
+import { initialiseUserInput } from './userInput'
 
 const main = () => {
     const startScrollButton = document.getElementById('scroll')
@@ -16,24 +17,6 @@ const scroll = () => {
     assignDefaults()
     createLayout()
 
-    document.addEventListener('keydown', (e: KeyboardEvent) => {
-        switch (e.key) {
-            case ' ':
-                e.preventDefault()
-                pause()
-                break
-            case 'o':
-            case 'O':
-                e.preventDefault()
-                document
-                    .getElementById('lexia-scroll-options')
-                    ?.classList.toggle('hide')
-                break
-            default:
-                return
-        }
-    })
-
     const tags = document.getElementsByTagName('p')
     if (!tags) return
     const lines: Line[] = []
@@ -47,7 +30,8 @@ const scroll = () => {
 
         paragraphIndex += sections.length
     }
-    ticker(lines, paragraphs)
+    initialiseUserInput()
+    loop(lines, paragraphs)
 }
 
 function splitWords(paragraphIndex: number, str: string): Line[] {
