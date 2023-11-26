@@ -48,7 +48,6 @@ export const ticker: Ticker = {
         requestAnimationFrame(this.tick.bind(this))
     },
     pause() {
-        console.log('pause: ', this.paused)
         this.paused = !this.paused
         document.getElementById('lexia-scroll-pause')?.classList.toggle('show')
     },
@@ -82,10 +81,12 @@ export const ticker: Ticker = {
         ticker.nextUpdateTime = Date.now() + rest
 
         const scrollContainer = document.getElementsByClassName(
-            'scroll-slide',
+            'lexia-scroll-slide',
         )[0] as HTMLElement
         scrollContainer.innerHTML = line.html
-        document.getElementById(`0`)?.classList.add('scroll-highlight')
-        document.getElementById(`1`)?.classList.add('scroll-highlight-pre')
+        document.getElementById(`0`)?.classList.add('lexia-scroll-highlight')
+        document
+            .getElementById(`1`)
+            ?.classList.add('lexia-scroll-highlight-pre')
     },
 }

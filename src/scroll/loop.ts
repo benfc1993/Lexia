@@ -4,7 +4,7 @@ import { Line } from './types'
 
 export function loop(lines: Line[], paragraphs: number[]) {
     const scrollSlide = document.getElementsByClassName(
-        'scroll-slide',
+        'lexia-scroll-slide',
     )[0] as HTMLElement
     if (!scrollSlide) return
 
@@ -18,18 +18,24 @@ export function loop(lines: Line[], paragraphs: number[]) {
 export function scrollWords(currentWord: number) {
     document
         .getElementById((currentWord - 2).toString())
-        ?.classList.remove('scroll-highlight-post')
+        ?.classList.remove('lexia-scroll-highlight-post')
     document
         .getElementById((currentWord - 1).toString())
-        ?.classList.replace('scroll-highlight', 'scroll-highlight-post')
+        ?.classList.replace(
+            'lexia-scroll-highlight',
+            'lexia-scroll-highlight-post',
+        )
     const nextEl = document.getElementById((currentWord + 1).toString())
-    nextEl?.classList.add('scroll-highlight-pre')
+    nextEl?.classList.add('lexia-scroll-highlight-pre')
 
     const current = document.getElementById(
         currentWord.toString(),
     ) as HTMLElement
 
-    current?.classList.replace('scroll-highlight-pre', 'scroll-highlight')
+    current?.classList.replace(
+        'lexia-scroll-highlight-pre',
+        'lexia-scroll-highlight',
+    )
     let next =
         Date.now() +
         1000 / Math.max(options.wps, 0.1) +
@@ -40,7 +46,7 @@ export function scrollWords(currentWord: number) {
 
     next +=
         options.newParagraphRest *
-        (current.classList.contains('new-paragraph') ? 1 : 0)
+        (current.classList.contains('lexia-new-paragraph') ? 1 : 0)
 
     if (current.innerText.match(/^\w+[\,\;][\s\'\"“”]?\s?$/))
         next += options.commaRest

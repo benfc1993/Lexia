@@ -5,6 +5,7 @@ import { Line } from './types'
 import { initialiseUserInput } from './userInput'
 
 const main = () => {
+    // for local version only do not use in extension
     const startScrollButton = document.getElementById('scroll')
     if (!startScrollButton) return
     startScrollButton.onclick = (e: MouseEvent) => {
@@ -51,19 +52,21 @@ function splitWords(paragraphIndex: number, str: string): Line[] {
         ) {
             sections.push({
                 count: j,
-                html: `<span class="word">${section}</span>`,
+                html: `<span class="lexia-word">${section}</span>`,
                 paragraph: paragraphIndex,
             })
             section = ''
             j = 0
         }
-        const newLineClass = j === options.sectionLength - 1 ? 'new-line' : ''
-        const newParagraphClass = i === words.length - 1 ? 'new-paragraph' : ''
-        section += ` </span><span class="word ${newLineClass} ${newParagraphClass}" id="${j}">${words[i]}`
+        const newLineClass =
+            j === options.sectionLength - 1 ? 'lexia-new-line' : ''
+        const newParagraphClass =
+            i === words.length - 1 ? 'lexia-new-paragraph' : ''
+        section += ` </span><span class="lexia-word ${newLineClass} ${newParagraphClass}" id="${j}">${words[i]}`
     }
     sections.push({
         count: j,
-        html: `<span class="paragraph">${section}</span>`,
+        html: `<span class="lexia-paragraph">${section}</span>`,
         paragraph: paragraphIndex,
     })
     return sections
