@@ -8,6 +8,9 @@ body {
     /* color:rgb(235 219 178); */
     color: #3f3f3f;
     line-height: 1.8rem;
+    font-family: 'Source Code Pro', monospace;
+    width: 100vw;
+    overflow-x: hidden;
 }
 span {
     transition: 0.2s cubic-bezier(0.39, 0.75, 0.54, 0.98);
@@ -116,11 +119,11 @@ span {
     white-space: nowrap;
     text-wrap: nowrap;
     font-size: 1.5rem;
-    color: #818181;
+    color: var(--textColor);
 }
 
 .scroll-highlight {
-    color: #fff;
+    color: var(--highlightColor);
     transition: color 0.1s ease-out;
 }
 .pause {
@@ -152,4 +155,36 @@ span {
 
 .pause.show {
     opacity: 1;
+}
+.scroll-options {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    color: #fff;
+    transition: right 0.5s ease;
+}
+
+.scroll-options.hide {
+    right: -300px;
+}
+
+.scroll-options__header {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.scroll-options__input {
+    background: #ffffff05;
+    outline: none;
+    border: solid 1px #8b8b8b;
+    border-radius: 5px;
+    padding: 0.4rem;
+    color: #fff;
+}
+
+.scroll-options__input[type='color'] {
+    padding: 0;
 }
