@@ -9,18 +9,18 @@ import {
 
 export function createLayout() {
     const overlay = document.createElement('div')
-    overlay.classList.add('scroll-overlay')
+    overlay.classList.add('lexia-scroll-overlay')
 
     const container = document.createElement('div')
-    container.classList.add('scroll-container')
+    container.classList.add('lexia-scroll-container')
     overlay.appendChild(container)
 
     const slide = document.createElement('div')
-    slide.classList.add('scroll-slide')
+    slide.classList.add('lexia-scroll-slide')
     container.appendChild(slide)
 
     const pause = document.createElement('div')
-    pause.classList.add('pause')
+    pause.classList.add('lexia-pause')
     pause.id = 'lexia-scroll-pause'
     overlay.appendChild(pause)
 
@@ -37,10 +37,10 @@ const inputTypes = {
 function createOptionsLayout(parent: Node) {
     const optionsContainer = document.createElement('div')
     optionsContainer.id = 'lexia-scroll-options'
-    optionsContainer.classList.add('scroll-options', 'hide')
+    optionsContainer.classList.add('lexia-scroll-options', 'hide')
 
     const header = document.createElement('h3')
-    header.classList.add('scroll-options__header')
+    header.classList.add('lexia-scroll-options__header')
     header.innerText = 'options'
     optionsContainer.appendChild(header)
 
@@ -78,10 +78,10 @@ function createOptionInput(
     label.setAttribute('for', `lexia-option-${key}`)
 
     const wrapper = document.createElement('div')
-    wrapper.classList.add('scroll-options__input-wrapper')
+    wrapper.classList.add('lexia-scroll-options__input-wrapper')
 
     const input = document.createElement('input')
-    input.classList.add('scroll-options__input')
+    input.classList.add('lexia-scroll-options__input')
     input.type = type
     input.id = `lexia-option-${key}`
     input.name = `lexia-option-${key}`

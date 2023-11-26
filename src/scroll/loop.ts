@@ -1,13 +1,8 @@
-import { options, pause, paused } from './data'
+import { options } from './data'
+import { ticker } from './ticker'
 import { Line } from './types'
 
-const progress = {
-    currentLine: 0,
-    currentWord: 0,
-    nextUpdateTime: Date.now(),
-}
-
-export function ticker(lines: Line[], paragraphs: number[]) {
+export function loop(lines: Line[], paragraphs: number[]) {
     const scrollSlide = document.getElementsByClassName(
         'scroll-slide',
     )[0] as HTMLElement
@@ -15,70 +10,12 @@ export function ticker(lines: Line[], paragraphs: number[]) {
 
     scrollSlide.innerHTML = lines[0].html
 
-    document.addEventListener(
-        'keydown',
-        function(e: KeyboardEvent) {
-            let jump = 0
-            switch (e.key) {
-                case 'ArrowLeft':
-                    e.preventDefault()
-                    if (progress.currentLine === 0) return
+    ticker.setData(lines, paragraphs)
 
-                    jump = progress.currentLine - 1
-                    break
-                case 'ArrowRight':
-                    e.preventDefault()
-
-                    if (progress.currentLine >= lines.length - 1) return
-                    jump = progress.currentLine + 1
-
-                    break
-                case 'ArrowUp': {
-                    e.preventDefault()
-                    const paragraphIndex = Math.max(
-                        0,
-                        lines[progress.currentLine].paragraph - 1,
-                    )
-                    jump = paragraphs[paragraphIndex]
-
-                    break
-                }
-                case 'ArrowDown': {
-                    e.preventDefault()
-                    const paragraphIndex = Math.min(
-                        lines[progress.currentLine].paragraph + 1,
-                        paragraphs.length - 1,
-                    )
-                    jump = paragraphs[paragraphIndex]
-
-                    break
-                }
-                default:
-                    return
-            }
-            if (!paused && options.pauseOnNavigate) pause()
-            setParagraph(jump, lines, options.newParagraphRest)
-        }.bind(progress),
-    )
-
-    const interval = setInterval(() => {
-        if (!paused && Date.now() >= progress.nextUpdateTime) {
-            if (progress.currentLine >= lines.length) {
-                clearInterval(interval)
-            } else if (
-                progress.currentWord >= lines[progress.currentLine].count
-            ) {
-                setParagraph(progress.currentLine + 1, lines)
-            } else {
-                const { current, next } = scrollWords(progress.currentWord)
-                progress.currentWord = current
-                progress.nextUpdateTime = next
-            }
-        }
-    })
+    ticker.tick()
 }
 
-function scrollWords(currentWord: number) {
+export function scrollWords(currentWord: number) {
     document
         .getElementById((currentWord - 2).toString())
         ?.classList.remove('scroll-highlight-post')
@@ -112,31 +49,4 @@ function scrollWords(currentWord: number) {
         next += options.fullStopRest
 
     return { current: currentWord + 1, next }
-}
-
-// export function jumpLine(dir: 1 | -1) { }
-//
-// export function jumpParagraph(dir: 1 | -1) {
-//     if (!paused && options.pauseOnNavigate) pause()
-//     setParagraph(jump, lines, options.newParagraphRest)
-// }
-
-function setParagraph(
-    lineIndex: number,
-    lines: Line[],
-    rest: number = options.newLineRest,
-) {
-    const line = lines[lineIndex]
-
-    if (!line) return
-    progress.currentLine = lineIndex
-    progress.currentWord = 0
-    progress.nextUpdateTime = Date.now() + rest
-
-    const scrollContainer = document.getElementsByClassName(
-        'scroll-slide',
-    )[0] as HTMLElement
-    scrollContainer.innerHTML = line.html
-    document.getElementById(`0`)?.classList.add('scroll-highlight')
-    document.getElementById(`1`)?.classList.add('scroll-highlight-pre')
 }

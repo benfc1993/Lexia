@@ -1,0 +1,190 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    background: rgb(25 25 25);
+    /* color:rgb(235 219 178); */
+    color: #3f3f3f;
+    line-height: 1.8rem;
+    font-family: 'Source Code Pro', monospace;
+    width: 100vw;
+    overflow-x: hidden;
+}
+span {
+    transition: 0.2s cubic-bezier(0.39, 0.75, 0.54, 0.98);
+}
+.options {
+    display: flex;
+}
+
+.hl-first {
+    color: rgb(131 165 152);
+    /* font-size: 1.3rem;  */
+}
+.hl-conjunction {
+    color: rgb(184 187 38);
+}
+.hl-preposition {
+    color: rgb(211 134 155);
+}
+.hl-center {
+    color: rgb(250 189 47);
+}
+.hl-punctuation {
+    color: rgb(250 189 47);
+    /* font-size: 1.3rem;  */
+}
+
+.line {
+    width: fit-content;
+    padding-right: 0.6rem;
+    padding-bottom: 0.3rem;
+    border-radius: 0.2rem;
+}
+
+.b-start {
+    border-left: solid 1px;
+    padding-left: 0.6rem;
+}
+
+.b-start-0 {
+    border-left-color: rgb(131 165 152);
+}
+
+.b-start-1 {
+    border-left-color: rgb(184 187 38);
+}
+
+.b-start-2 {
+    border-left-color: rgb(211 134 155);
+}
+
+.b-start-3 {
+    border-left-color: rgb(250 189 47);
+}
+
+.b-line {
+    border-bottom: solid 1px;
+    /* border-right: solid 1px; */
+}
+
+.b-line-0 {
+    border-bottom-color: rgb(131 165 152);
+    border-right-color: rgb(131 165 152);
+}
+
+.b-line-1 {
+    border-bottom-color: rgb(184 187 38);
+    border-right-color: rgb(184 187 38);
+}
+
+.b-line-2 {
+    border-bottom-color: rgb(211 134 155);
+    border-right-color: rgb(211 134 155);
+}
+
+.b-line-3 {
+    border-bottom-color: rgb(250 189 47);
+    border-right-color: rgb(250 189 47);
+}
+.lexia-scroll-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #222;
+}
+
+.lexia-scroll-container {
+    background: #222;
+    width: 30%;
+    height: 3rem;
+    padding: 0 3rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    position: relative;
+}
+
+.lexia-scroll-slide {
+    position: absolute;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-wrap: nowrap;
+    font-size: 1.5rem;
+    color: var(--textColor);
+}
+
+.lexia-scroll-highlight {
+    color: var(--highlightColor);
+    transition: color 0.1s ease-out;
+}
+.lexia-pause {
+    background: #6161616e;
+    width: 3rem;
+    height: 3rem;
+    position: absolute;
+    border-radius: 5px;
+    margin-top: 5rem;
+    opacity: 0;
+    transition: opacity 0.1s ease-out;
+}
+.lexia-pause::before {
+    content: '';
+    position: absolute;
+    background: linear-gradient(
+        to right,
+        #fff,
+        #fff 25%,
+        rgba(0, 0, 0, 0) 25%,
+        rgba(0, 0, 0, 0) 75%,
+        #fff 75%
+    );
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
+    left: 5px;
+}
+
+.lexia-pause.show {
+    opacity: 1;
+}
+.lexia-scroll-options {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    color: #fff;
+    transition: right 0.5s ease;
+}
+
+.lexia-scroll-options.hide {
+    right: -300px;
+}
+
+.lexia-scroll-options__header {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.lexia-scroll-options__input {
+    background: #ffffff05;
+    outline: none;
+    border: solid 1px #8b8b8b;
+    border-radius: 5px;
+    padding: 0.4rem;
+    color: #fff;
+}
+
+.lexia-scroll-options__input[type='color'] {
+    padding: 0;
+}
