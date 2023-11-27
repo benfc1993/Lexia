@@ -12,6 +12,7 @@
     align-items: center;
     background: #222;
     font-family: 'Source Code Pro', monospace;
+    overflow: hidden;
 }
 
 .lexia-scroll-container {

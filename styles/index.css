@@ -12,9 +12,6 @@ body {
     width: 100vw;
     overflow-x: hidden;
 }
-span {
-    transition: 0.2s cubic-bezier(0.39, 0.75, 0.54, 0.98);
-}
 .options {
     display: flex;
 }

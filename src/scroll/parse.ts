@@ -1,4 +1,3 @@
-import { storage } from '../storage/localStorage'
 import { AsyncStorage, Storage } from '../storage/types'
 import { assignDefaults, options, setStorageMethod } from './data'
 import { createLayout } from './layout'
@@ -7,22 +6,12 @@ import { ticker } from './ticker'
 import { Line } from './types'
 import { initialiseUserInput } from './userInput'
 
-const main = () => {
-    // for local version only do not use in extension
-    const startScrollButton = document.getElementById('scroll')
-    if (!startScrollButton) return
-    startScrollButton.onclick = (e: MouseEvent) => {
-        e.preventDefault()
-        scroll(storage())
-    }
-}
-
 export function quit() {
     ticker.end()
     const overlay = document.getElementById('lexia-scroll-overlay')
     if (overlay) overlay.remove()
 }
-export const scroll = (storage: Storage | AsyncStorage) => {
+export const startScroll = (storage: Storage | AsyncStorage) => {
     setStorageMethod(storage)
     assignDefaults()
     createLayout()
@@ -79,5 +68,3 @@ function splitWords(paragraphIndex: number, str: string): Line[] {
     })
     return sections
 }
-
-main()

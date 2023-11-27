@@ -1,8 +1,8 @@
-import { quit } from '.'
+import { quit } from './parse'
 import { ticker } from './ticker'
 
 export function initialiseUserInput() {
-    document.addEventListener('keydown', function(e: KeyboardEvent) {
+    document.addEventListener('keydown', function (e: KeyboardEvent) {
         switch (e.key) {
             case ' ':
                 e.preventDefault()
@@ -21,7 +21,7 @@ export function initialiseUserInput() {
                 return
         }
     })
-    document.addEventListener('keydown', function(e: KeyboardEvent) {
+    document.addEventListener('keydown', function (e: KeyboardEvent) {
         switch (e.key) {
             case 'ArrowLeft':
                 e.preventDefault()

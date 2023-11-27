@@ -1,4 +1,4 @@
-import { scroll } from './scroll/index'
+import { startScroll } from './scroll/parse'
 import { storage } from './storage/sync'
 
-scroll(storage())
+startScroll(storage())
