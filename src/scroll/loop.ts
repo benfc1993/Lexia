@@ -8,34 +8,43 @@ export function loop(lines: Line[], paragraphs: number[]) {
     )[0] as HTMLElement
     if (!scrollSlide) return
 
-    scrollSlide.innerHTML = lines[0].html
+    ticker.setData(
+        document.getElementById('lexia-scroll-slide')!,
+        lines,
+        paragraphs,
+    )
 
-    ticker.setData(lines, paragraphs)
-
+    ticker.setLine(0)
     ticker.tick()
 }
 
-export function scrollWords(currentWord: number) {
-    document
-        .getElementById((currentWord - 2).toString())
-        ?.classList.remove('lexia-scroll-highlight-post')
-    document
-        .getElementById((currentWord - 1).toString())
-        ?.classList.replace(
-            'lexia-scroll-highlight',
-            'lexia-scroll-highlight-post',
-        )
-    const nextEl = document.getElementById((currentWord + 1).toString())
+export function scrollWords(
+    containerElement: HTMLElement,
+    currentWord: number,
+) {
+    if (currentWord >= 2)
+        containerElement
+            .querySelector(`#lexia-word-${(currentWord - 2).toString()}`)
+            ?.classList.remove('lexia-scroll-highlight-post')
+    if (currentWord >= 1)
+        containerElement
+            .querySelector(`#lexia-word-${(currentWord - 1).toString()}`)
+            ?.classList.replace(
+                'lexia-scroll-highlight',
+                'lexia-scroll-highlight-post',
+            )
+    const nextEl = containerElement.querySelector(
+        `#lexia-word-${(currentWord + 1).toString()}`,
+    )
     nextEl?.classList.add('lexia-scroll-highlight-pre')
 
-    const current = document.getElementById(
-        currentWord.toString(),
+    const current = containerElement.querySelector(
+        `#lexia-word-${currentWord.toString()}`,
     ) as HTMLElement
 
-    current?.classList.replace(
-        'lexia-scroll-highlight-pre',
-        'lexia-scroll-highlight',
-    )
+    current?.classList.remove('lexia-scroll-highlight-pre')
+
+    current?.classList.add('lexia-scroll-highlight')
     let next =
         Date.now() +
         1000 / Math.max(options.wps, 0.1) +

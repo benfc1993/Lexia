@@ -62,7 +62,7 @@ function splitWords(paragraphIndex: number, str: string): Line[] {
             j === options.sectionLength - 1 ? 'lexia-new-line' : ''
         const newParagraphClass =
             i === words.length - 1 ? 'lexia-new-paragraph' : ''
-        section += ` </span><span class="lexia-word ${newLineClass} ${newParagraphClass}" id="${j}">${words[i]}`
+        section += ` </span><span class="lexia-word ${newLineClass} ${newParagraphClass}" id="lexia-word-${j}">${words[i]}`
     }
     sections.push({
         count: j,

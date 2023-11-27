@@ -9,8 +9,13 @@ export interface Ticker {
     nextUpdateTime: number
     lines: Line[]
     paragraphs: number[]
+    containerElement: HTMLElement
     tick: () => void
-    setData: (lines: Line[], paragraphs: number[]) => void
+    setData: (
+        containerElement: HTMLElement,
+        lines: Line[],
+        paragraphs: number[],
+    ) => void
     pause: () => void
     jumpLine: (dir: 1 | -1) => void
     jumpParagraph: (dir: 1 | -1) => void
@@ -24,9 +29,15 @@ export const ticker: Ticker = {
     nextUpdateTime: Date.now(),
     lines: [],
     paragraphs: [],
-    setData(lines: Line[], paragraphs: number[]) {
+    containerElement: document.getElementById('lexia-scroll-slide')!,
+    setData(
+        containerElement: HTMLElement,
+        lines: Line[],
+        paragraphs: number[],
+    ) {
         this.lines = lines
         this.paragraphs = paragraphs
+        this.containerElement = containerElement
     },
     tick() {
         if (
@@ -41,7 +52,11 @@ export const ticker: Ticker = {
         if (this.currentWord >= this.lines[this.currentLine].count) {
             this.setLine(this.currentLine + 1)
         } else {
-            const { current, next } = scrollWords(this.currentWord)
+            console.log(this.currentWord)
+            const { current, next } = scrollWords(
+                this.containerElement,
+                this.currentWord,
+            )
             this.currentWord = current
             this.nextUpdateTime = next
         }
@@ -80,9 +95,28 @@ export const ticker: Ticker = {
         ticker.currentWord = 0
         ticker.nextUpdateTime = Date.now() + rest
 
+        const postLine = document.getElementById('lexia-scroll-line-post')!
+        postLine.innerHTML = ''
+        if (postLine && lineIndex - 1 >= 0) {
+            if (line.paragraph === this.lines[lineIndex - 1].paragraph)
+                postLine.innerHTML = `<div>${
+                    this.lines[lineIndex - 1].html
+                }</div`
+        }
+
         const scrollContainer = document.getElementsByClassName(
             'lexia-scroll-slide',
         )[0] as HTMLElement
+
+        const preLine = document.getElementById('lexia-scroll-line-pre')!
+        preLine.innerHTML = ''
+        if (preLine && lineIndex + 1 < this.lines.length) {
+            if (line.paragraph == this.lines[lineIndex + 1].paragraph)
+                preLine.innerHTML = `<div>${
+                    this.lines[lineIndex + 1].html
+                }</div>`
+        }
+
         scrollContainer.innerHTML = line.html
         document.getElementById(`0`)?.classList.add('lexia-scroll-highlight')
         document

@@ -11,13 +11,24 @@ export function createLayout() {
     const overlay = document.createElement('div')
     overlay.classList.add('lexia-scroll-overlay')
 
+    const post = document.createElement('div')
+    post.classList.add('lexia-scroll-line-post', 'lexia-scroll-container')
+    post.id = 'lexia-scroll-line-post'
+    overlay.appendChild(post)
+
     const container = document.createElement('div')
     container.classList.add('lexia-scroll-container')
     overlay.appendChild(container)
 
     const slide = document.createElement('div')
     slide.classList.add('lexia-scroll-slide')
+    slide.id = 'lexia-scroll-slide'
     container.appendChild(slide)
+
+    const pre = document.createElement('div')
+    pre.classList.add('lexia-scroll-line-pre', 'lexia-scroll-container')
+    pre.id = 'lexia-scroll-line-pre'
+    overlay.appendChild(pre)
 
     const pause = document.createElement('div')
     pause.classList.add('lexia-pause')
