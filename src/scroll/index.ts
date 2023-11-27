@@ -1,4 +1,6 @@
-import { assignDefaults, options } from './data'
+import { storage } from '../storage/localStorage'
+import { AsyncStorage, Storage } from '../storage/types'
+import { assignDefaults, options, setStorageMethod } from './data'
 import { createLayout } from './layout'
 import { loop } from './loop'
 import { ticker } from './ticker'
@@ -11,7 +13,7 @@ const main = () => {
     if (!startScrollButton) return
     startScrollButton.onclick = (e: MouseEvent) => {
         e.preventDefault()
-        scroll()
+        scroll(storage())
     }
 }
 
@@ -20,7 +22,8 @@ export function quit() {
     const overlay = document.getElementById('lexia-scroll-overlay')
     if (overlay) overlay.remove()
 }
-const scroll = () => {
+export const scroll = (storage: Storage | AsyncStorage) => {
+    setStorageMethod(storage)
     assignDefaults()
     createLayout()
     const tags = document.getElementsByTagName('p')

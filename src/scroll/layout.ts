@@ -66,7 +66,7 @@ function createOptionsLayout(parent: Node) {
 }
 
 function createOptionInput(key: keyof typeof options, option: Option) {
-    const type = inputTypes[option.type]
+    const type = option.inputType ?? inputTypes[option.type]
     const inputContainer = document.createElement('div')
     const label = document.createElement('label')
     label.innerText = camelToScentence(key)

@@ -1,6 +1,6 @@
-import type { AsyncStorage } from './types'
+import { Storage } from './types'
 
-export const storage = (): AsyncStorage => ({
+export const storage = (): Storage => ({
     set: <T>(_key: string, value: T) => {
         chrome.storage.sync.set(value as Object)
     },

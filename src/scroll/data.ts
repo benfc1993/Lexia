@@ -1,5 +1,5 @@
 import { storage } from '../storage/localStorage'
-import { stringToBoolean } from '../utils/conversion'
+import { Storage, AsyncStorage } from '../storage/types'
 import { eventChecked, eventValue } from '../utils/htmlHelpers'
 import { BooleanOption, NumberOption, StringOption } from './types'
 
@@ -112,6 +112,7 @@ export const options: Options = {
             return '#3f3f3f'
         },
         type: 'string',
+        inputType: 'color',
         cssVar: 'textColor',
         reset() {
             this.value = this.default
@@ -130,6 +131,7 @@ export const options: Options = {
             return '#ffffff'
         },
         type: 'string',
+        inputType: 'color',
         cssVar: 'highlightColor',
         reset() {
             this.value = this.default
@@ -164,7 +166,11 @@ enum StorageKey {
     ColorOptions = 'lexia-color-options',
 }
 
-const optionStorage = storage()
+let optionStorage: Storage | AsyncStorage = storage()
+
+export function setStorageMethod(storage: Storage | AsyncStorage) {
+    optionStorage = storage
+}
 
 export function updateCssVar(key: string, value: string) {
     const r = document.querySelector(':root') as HTMLElement
@@ -176,6 +182,18 @@ export async function assignDefaults() {
     Object.keys(options).forEach((key) => {
         const keyT = key as keyof typeof options
         options[keyT].value = storedOptions[keyT].value
+
+        const input = document.getElementById(
+            `lexia-option-${keyT}`,
+        ) as HTMLInputElement
+        if (input) {
+            const option = options[keyT]
+            if (option.type === 'boolean') {
+                input.checked = option.value
+            } else {
+                input.value = options[keyT].value.toString()
+            }
+        }
     })
 
     const root = document.querySelector(':root') as HTMLElement
