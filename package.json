@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "esbuild src/scroll/index.ts --bundle  --outdir=build --watch --sourcemap",
+        "dev": "esbuild src/localScroll.ts --bundle  --outdir=build --watch --sourcemap",
         "build-extension": "rm -rf dist && esbuild src/lexia.ts src/scroll.ts extension/background.ts extension/options.ts --bundle  --outdir=dist --minify  && cp extension/* dist/ && cp styles/* dist/",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
