@@ -1,6 +1,7 @@
 import { assignDefaults, options } from './data'
 import { createLayout } from './layout'
 import { loop } from './loop'
+import { ticker } from './ticker'
 import { Line } from './types'
 import { initialiseUserInput } from './userInput'
 
@@ -14,10 +15,14 @@ const main = () => {
     }
 }
 
+export function quit() {
+    ticker.end()
+    const overlay = document.getElementById('lexia-scroll-overlay')
+    if (overlay) overlay.remove()
+}
 const scroll = () => {
     assignDefaults()
     createLayout()
-
     const tags = document.getElementsByTagName('p')
     if (!tags) return
     const lines: Line[] = []
@@ -47,7 +52,7 @@ function splitWords(paragraphIndex: number, str: string): Line[] {
     let j = 0
     for (let i = 0; i < words.length; i++, j++) {
         if (
-            j === options.sectionLength ||
+            j === options.sectionLength.value ||
             (i > 0 && words[i - 1].match(/^\w+\.\s?$/))
         ) {
             sections.push({
@@ -59,7 +64,7 @@ function splitWords(paragraphIndex: number, str: string): Line[] {
             j = 0
         }
         const newLineClass =
-            j === options.sectionLength - 1 ? 'lexia-new-line' : ''
+            j === options.sectionLength.value - 1 ? 'lexia-new-line' : ''
         const newParagraphClass =
             i === words.length - 1 ? 'lexia-new-paragraph' : ''
         section += ` </span><span class="lexia-word ${newLineClass} ${newParagraphClass}" id="lexia-word-${j}">${words[i]}`

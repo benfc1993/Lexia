@@ -9,3 +9,15 @@ export function camelToScentence(str: string) {
 
     return string
 }
+
+export function camelToKebab(str: string) {
+    let string = str[0].toUpperCase()
+    for (const char of str.slice(1)) {
+        if (char.match(/[A-Z]/)) {
+            string += '-'
+        }
+        string += char
+    }
+
+    return string.toLowerCase()
+}

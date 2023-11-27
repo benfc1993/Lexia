@@ -1,3 +1,4 @@
+import { quit } from '.'
 import { ticker } from './ticker'
 
 export function initialiseUserInput() {
@@ -14,6 +15,8 @@ export function initialiseUserInput() {
                     .getElementById('lexia-scroll-options')
                     ?.classList.toggle('hide')
                 break
+            case 'Escape':
+                quit()
             default:
                 return
         }

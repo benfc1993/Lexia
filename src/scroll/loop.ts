@@ -47,21 +47,21 @@ export function scrollWords(
     current?.classList.add('lexia-scroll-highlight')
     let next =
         Date.now() +
-        1000 / Math.max(options.wps, 0.1) +
+        1000 / Math.max(options.wps.value, 0.1) +
         (current.innerText.length - 6) * 10
     if (!nextEl) {
         next += 50
     }
 
     next +=
-        options.newParagraphRest *
+        options.newParagraphRest.value *
         (current.classList.contains('lexia-new-paragraph') ? 1 : 0)
 
     if (current.innerText.match(/^\w+[\,\;][\s\'\"“”]?\s?$/))
-        next += options.commaRest
+        next += options.commaRest.value
 
     if (current.innerText.match(/^\w+\.[\s\'\"“”]?\s?$/))
-        next += options.fullStopRest
+        next += options.fullStopRest.value
 
     return { current: currentWord + 1, next }
 }

@@ -1,15 +1,11 @@
 import { camelToScentence } from '../utils/text-transform'
-import {
-    colorOptionChange,
-    colorOptions,
-    optionChange,
-    options,
-    resetDefault,
-} from './data'
+import { options, resetDefault } from './data'
+import type { Option } from './types'
 
 export function createLayout() {
     const overlay = document.createElement('div')
     overlay.classList.add('lexia-scroll-overlay')
+    overlay.id = 'lexia-scroll-overlay'
 
     const post = document.createElement('div')
     post.classList.add('lexia-scroll-line-post', 'lexia-scroll-container')
@@ -56,12 +52,9 @@ function createOptionsLayout(parent: Node) {
     optionsContainer.appendChild(header)
 
     for (const [key, value] of Object.entries(options)) {
-        const valueType = typeof value
         const input = createOptionInput(
-            key,
-            value.toString(),
-            inputTypes[valueType as keyof typeof inputTypes] ?? '',
-            optionChange,
+            key as keyof typeof options,
+            value,
         ) as HTMLInputElement
 
         if (key === 'wps')
@@ -69,20 +62,11 @@ function createOptionsLayout(parent: Node) {
         optionsContainer.appendChild(input)
     }
 
-    for (const [key, value] of Object.entries(colorOptions)) {
-        const input = createOptionInput(key, value, 'color', colorOptionChange)
-        optionsContainer.appendChild(input)
-    }
-
     parent.appendChild(optionsContainer)
 }
 
-function createOptionInput(
-    key: string,
-    value: string,
-    type: string,
-    onChange: (key: string, value: string) => void,
-) {
+function createOptionInput(key: keyof typeof options, option: Option) {
+    const type = inputTypes[option.type]
     const inputContainer = document.createElement('div')
     const label = document.createElement('label')
     label.innerText = camelToScentence(key)
@@ -96,22 +80,14 @@ function createOptionInput(
     input.type = type
     input.id = `lexia-option-${key}`
     input.name = `lexia-option-${key}`
-    type === 'checkbox'
-        ? (input.checked = value === 'true' ? true : false)
-        : (input.value = value.toString())
-    input.addEventListener('change', (e: Event) =>
-        onChange(
-            key,
-            type === 'checkbox'
-                ? (e.target as HTMLInputElement)?.checked.toString()
-                : (e.target as HTMLInputElement)?.value,
-        ),
-    )
+    option.type === 'boolean'
+        ? (input.checked = option.value)
+        : (input.value = option.value.toString())
+    input.addEventListener('change', option.onChange.bind(options[key]))
 
     const resetButton = document.createElement('button')
     resetButton.innerText = '↺'
-    resetButton.onclick = (_e: MouseEvent) =>
-        resetDefault(key as keyof typeof options)
+    resetButton.onclick = (_e: MouseEvent) => resetDefault(key)
 
     wrapper.appendChild(input)
     wrapper.appendChild(resetButton)

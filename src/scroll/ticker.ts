@@ -9,7 +9,7 @@ export interface Ticker {
     nextUpdateTime: number
     lines: Line[]
     paragraphs: number[]
-    containerElement: HTMLElement
+    containerElement: HTMLElement | null
     tick: () => void
     setData: (
         containerElement: HTMLElement,
@@ -20,6 +20,7 @@ export interface Ticker {
     jumpLine: (dir: 1 | -1) => void
     jumpParagraph: (dir: 1 | -1) => void
     setLine: (lineIndex: number, rest?: number) => void
+    end: () => void
 }
 
 export const ticker: Ticker = {
@@ -29,7 +30,7 @@ export const ticker: Ticker = {
     nextUpdateTime: Date.now(),
     lines: [],
     paragraphs: [],
-    containerElement: document.getElementById('lexia-scroll-slide')!,
+    containerElement: null,
     setData(
         containerElement: HTMLElement,
         lines: Line[],
@@ -38,8 +39,13 @@ export const ticker: Ticker = {
         this.lines = lines
         this.paragraphs = paragraphs
         this.containerElement = containerElement
+        this.paused = false
+        this.currentWord = 0
+        this.currentLine = 0
+        this.nextUpdateTime = Date.now()
     },
     tick() {
+        if (!this.containerElement) return
         if (
             this.currentLine >= this.lines.length ||
             this.paused ||
@@ -52,7 +58,6 @@ export const ticker: Ticker = {
         if (this.currentWord >= this.lines[this.currentLine].count) {
             this.setLine(this.currentLine + 1)
         } else {
-            console.log(this.currentWord)
             const { current, next } = scrollWords(
                 this.containerElement,
                 this.currentWord,
@@ -67,12 +72,12 @@ export const ticker: Ticker = {
         document.getElementById('lexia-scroll-pause')?.classList.toggle('show')
     },
     jumpLine(dir: 1 | -1) {
-        if (!this.paused && options.pauseOnNavigate) this.pause()
+        if (!this.paused && options.pauseOnNavigate.value) this.pause()
         const jump = Math.max(
             0,
             Math.min(this.currentLine + dir, ticker.lines.length - 1),
         )
-        this.setLine(jump, options.newParagraphRest)
+        this.setLine(jump, options.newParagraphRest.value)
     },
 
     jumpParagraph(dir: 1 | -1) {
@@ -84,10 +89,10 @@ export const ticker: Ticker = {
             ),
         )
         let jump = this.paragraphs[paragraphIndex]
-        if (!this.paused && options.pauseOnNavigate) this.pause()
-        this.setLine(jump, options.newParagraphRest)
+        if (!this.paused && options.pauseOnNavigate.value) this.pause()
+        this.setLine(jump, options.newParagraphRest.value)
     },
-    setLine(lineIndex: number, rest: number = options.newLineRest) {
+    setLine(lineIndex: number, rest: number = options.newLineRest.value) {
         const line = this.lines[lineIndex]
 
         if (!line) return
@@ -122,5 +127,13 @@ export const ticker: Ticker = {
         document
             .getElementById(`1`)
             ?.classList.add('lexia-scroll-highlight-pre')
+    },
+    end() {
+        this.lines = []
+        this.paragraphs = []
+        this.currentWord = 0
+        this.currentLine = 0
+        this.paused = false
+        this.containerElement = null
     },
 }
