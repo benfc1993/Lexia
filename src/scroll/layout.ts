@@ -14,6 +14,7 @@ export function createLayout() {
 
     const container = document.createElement('div')
     container.classList.add('lexia-scroll-container')
+
     overlay.appendChild(container)
 
     const slide = document.createElement('div')
@@ -31,6 +32,24 @@ export function createLayout() {
     pause.id = 'lexia-scroll-pause'
     overlay.appendChild(pause)
 
+    const instructionsContainer = document.createElement('div')
+    instructionsContainer.classList.add('lexia-instructions-container')
+    if (options.hideInstructions.value)
+        instructionsContainer.classList.add('hide')
+    instructionsContainer.id = 'lexia-instructions'
+
+    const escape = document.createElement('p')
+    escape.innerText = 'Esc to quit'
+    instructionsContainer.appendChild(escape)
+
+    const space = document.createElement('p')
+    space.innerText = 'Space to pause'
+    instructionsContainer.appendChild(space)
+
+    const optionsInstruction = document.createElement('p')
+    optionsInstruction.innerText = 'O for options'
+    instructionsContainer.appendChild(optionsInstruction)
+    overlay.appendChild(instructionsContainer)
     document.body.appendChild(overlay)
     createOptionsLayout(overlay)
 }
@@ -38,7 +57,7 @@ export function createLayout() {
 const inputTypes = {
     boolean: 'checkbox',
     string: 'text',
-    number: 'number',
+    number: 'number'
 } as const
 
 function createOptionsLayout(parent: Node) {
@@ -49,20 +68,42 @@ function createOptionsLayout(parent: Node) {
     const header = document.createElement('h3')
     header.classList.add('lexia-scroll-options__header')
     header.innerText = 'options'
+
     optionsContainer.appendChild(header)
 
     for (const [key, value] of Object.entries(options)) {
         const input = createOptionInput(
             key as keyof typeof options,
-            value,
+            value
         ) as HTMLInputElement
 
-        if (key === 'wps')
-            input.querySelector('#lexia-option-wps')?.setAttribute('min', '0.1')
         optionsContainer.appendChild(input)
     }
 
+    const controlsContainer = document.createElement('div')
+    controlsContainer.classList.add('lexia-controls-container')
+    optionsContainer.appendChild(controlsContainer)
+
+    const controls = [
+        '⬅ Back one line',
+        '➡ Forward one line',
+        '⬆ Up one paragraph',
+        '⬇ Down one paragraph'
+    ]
+    controls.forEach((control) => {
+        const el = document.createElement('p')
+        el.innerText = control
+        el.classList.add('lexia-control-text')
+        controlsContainer.appendChild(el)
+    })
     parent.appendChild(optionsContainer)
+}
+
+export function createSelectionNotification() {
+    const notification = document.createElement('div')
+    notification.classList.add('lexia-selection-notification')
+    notification.innerText = 'Lexia Selection Active'
+    document.body.appendChild(notification)
 }
 
 function createOptionInput(key: keyof typeof options, option: Option) {

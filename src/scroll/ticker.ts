@@ -9,11 +9,15 @@ export interface Ticker {
     nextUpdateTime: number
     lines: Line[]
     paragraphs: number[]
+    pTags: HTMLElement[]
+    parentElement: HTMLElement | null
     containerElement: HTMLElement | null
     tick: () => void
     setData: (
         lines: Line[],
         paragraphs: number[],
+        pTags: HTMLElement[],
+        parentElement: HTMLElement,
         containerElement?: HTMLElement,
     ) => void
     pause: () => void
@@ -31,14 +35,20 @@ export const ticker: Ticker = {
     nextUpdateTime: Date.now(),
     lines: [],
     paragraphs: [],
+    pTags: [],
+    parentElement: null,
     containerElement: null,
     setData(
         lines: Line[],
         paragraphs: number[],
+        pTags: HTMLElement[],
+        parentElement: HTMLElement,
         containerElement?: HTMLElement,
     ) {
         this.lines = lines
         this.paragraphs = paragraphs
+        this.pTags = pTags
+        this.parentElement = parentElement
         this.containerElement = containerElement ?? this.containerElement
         this.paused = false
         this.currentWord = 0

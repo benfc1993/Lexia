@@ -2,7 +2,12 @@ import { options } from './data'
 import { ticker } from './ticker'
 import { Line } from './types'
 
-export function loop(lines: Line[], paragraphs: number[]) {
+export function loop(
+    lines: Line[],
+    paragraphs: number[],
+    pTags: HTMLElement[],
+    parentElement: HTMLElement,
+) {
     const scrollSlide = document.getElementsByClassName(
         'lexia-scroll-slide',
     )[0] as HTMLElement
@@ -11,6 +16,8 @@ export function loop(lines: Line[], paragraphs: number[]) {
     ticker.setData(
         lines,
         paragraphs,
+        pTags,
+        parentElement,
         document.getElementById('lexia-scroll-slide')!,
     )
 

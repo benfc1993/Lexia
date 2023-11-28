@@ -9,7 +9,7 @@ enum HlClass {
     Conjunction = 'conj',
     Preposition = 'prep',
     Punctuation = 'punc',
-    Center = 'center',
+    Center = 'center'
 }
 export type Options = Record<Exclude<HlClass, '' | 'newline'>, boolean> & {
     highlight: boolean
@@ -21,11 +21,10 @@ let options: Options = {
     first: false,
     center: false,
     conj: false,
-    prep: false,
+    prep: false
 }
 const optionStorage = storage()
 const main = async () => {
-    console.log('testing')
     await optionStorage
         .get<Options>('', {
             highlight: false,
@@ -33,19 +32,16 @@ const main = async () => {
             first: false,
             center: false,
             conj: false,
-            prep: false,
+            prep: false
         })
         .then((items) => Object.assign(options, items))
-    console.log(options)
     const div = [...document.getElementsByTagName('p')].filter(
-        (el) => !el.classList.contains('lexia-line'),
+        (el) => !el.classList.contains('lexia-line')
     )
 
     if (!div) return
-    console.log(div)
 
     const lexiaElements = document.getElementsByClassName('lexia-text')
-    console.log(lexiaElements)
     for (let i = lexiaElements.length - 1; i >= 0; i--) {
         const el = lexiaElements[i]
         el.remove()
@@ -55,7 +51,6 @@ const main = async () => {
     }
     if (options.highlight) {
         for (const tag of div) {
-            console.log(tag)
             const newTag = document.createElement('div')
             newTag.classList.add('lexia-text')
             tag.parentNode?.insertBefore(newTag, tag)
@@ -103,7 +98,7 @@ function lexer(element: Element, str: string) {
                 text: word,
                 position: 0,
                 hasChildren: () => false,
-                scentanceStart: false,
+                scentanceStart: false
             })
             continue
         }
@@ -116,7 +111,7 @@ function lexer(element: Element, str: string) {
             children: [],
             hasChildren() {
                 return Object.hasOwn(this, 'children')
-            },
+            }
         }
 
         if (punctuation.includes(word.at(-1) ?? '')) {
@@ -125,8 +120,8 @@ function lexer(element: Element, str: string) {
                     HlClass.Punctuation,
                     word.at(-1) as string,
                     word.length - 1,
-                    wordToken.scentanceStart,
-                ),
+                    wordToken.scentanceStart
+                )
             )
         }
 
@@ -135,8 +130,8 @@ function lexer(element: Element, str: string) {
                 HlClass.First,
                 currentWord.slice(0, 1),
                 0,
-                wordToken.scentanceStart,
-            ),
+                wordToken.scentanceStart
+            )
         )
 
         if (fullWord.length > 8) {
@@ -145,8 +140,8 @@ function lexer(element: Element, str: string) {
                     HlClass.Center,
                     currentWord.slice(2, -2),
                     2,
-                    wordToken.scentanceStart,
-                ),
+                    wordToken.scentanceStart
+                )
             )
         }
         elementTokens.push(wordToken)
@@ -162,7 +157,7 @@ function createToken(
     type: HlClass,
     text: string,
     position: number,
-    scentanceStart: boolean,
+    scentanceStart: boolean
 ) {
     return {
         type,
@@ -171,7 +166,7 @@ function createToken(
         scentanceStart,
         hasChildren() {
             return false
-        },
+        }
     }
 }
 function parser(tokens: Token[]) {
@@ -187,7 +182,7 @@ function parser(tokens: Token[]) {
                     lineIndex++
                     lineIndex %= 4
                     highlights.push(
-                        `<p class='lexia-line b-start b-start-${prevLineIdx} b-lexia-line b-lexia-line-${lineIndex}'>`,
+                        `<p class='lexia-line b-start b-start-${prevLineIdx} b-lexia-line b-lexia-line-${lineIndex}'>`
                     )
                 }
                 return highlights.join('')
@@ -195,7 +190,7 @@ function parser(tokens: Token[]) {
             if (!token.hasChildren())
                 return highlightWrap(token.text, token.type)
             const children = token.children!.sort(
-                (a, b) => a.position - b.position,
+                (a, b) => a.position - b.position
             )
 
             let remainder = token.text
@@ -213,12 +208,12 @@ function parser(tokens: Token[]) {
                 const hl = highlightWrap(
                     remainder.slice(
                         offsetChildPosition,
-                        offsetChildPosition + child.text.length,
+                        offsetChildPosition + child.text.length
                     ),
-                    child.type,
+                    child.type
                 )
                 remainder = remainder.slice(
-                    offsetChildPosition + child.text.length,
+                    offsetChildPosition + child.text.length
                 )
                 if (before.length) highlights.push(before)
                 highlights.push(hl)

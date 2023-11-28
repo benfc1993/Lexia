@@ -1,7 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500;600&display=swap');
+[lexia=''] {
+    pointer-events: none;
+}
+.lexia-selection-notification {
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #6115428c;
+    padding: 0.5rem;
+    border-radius: 10px;
+    color: #fff;
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+.lexia-selection {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 5px;
+}
 .lexia-scroll-overlay {
-    z-index: 100;
-    position: absolute;
+    z-index: 100000;
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
@@ -13,6 +33,24 @@
     background: #222;
     font-family: 'Source Code Pro', monospace;
     overflow: hidden;
+}
+.lexia-instructions-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    color: #ebe148;
+}
+
+.lexia-instructions-container p {
+    margin: 0;
+}
+
+.lexia-instructions-container.hide {
+    display: none;
 }
 
 .lexia-scroll-container {
@@ -44,6 +82,31 @@
 
 .lexia-word {
     transition: 0.2s cubic-bezier(0.39, 0.75, 0.54, 0.98);
+}
+
+.lexia-H1 {
+    font-size: 2rem;
+    font-weight: 500;
+}
+.lexia-H2 {
+    font-size: 1.9rem;
+    font-weight: 500;
+}
+.lexia-H3 {
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+.lexia-H4 {
+    font-size: 1.7rem;
+    font-weight: 500;
+}
+.lexia-H5 {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+.lexia-H6 {
+    font-size: 1.5rem;
+    font-weight: 500;
 }
 .lexia-scroll-highlight {
     color: var(--highlightColor);
@@ -95,6 +158,14 @@
 
 .lexia-scroll-options.hide {
     right: -300px;
+}
+
+.lexia-controls-container {
+    margin-top: 10px;
+}
+
+.lexia-control-text {
+    margin: 0;
 }
 
 .lexia-scroll-options__header {

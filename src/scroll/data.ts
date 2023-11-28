@@ -15,6 +15,7 @@ type Options = {
     textColor: StringOption
     highlightColor: StringOption
     pauseOnNavigate: BooleanOption
+    hideInstructions: BooleanOption
 }
 
 export const options: Options = {
@@ -29,9 +30,9 @@ export const options: Options = {
             optionStorage.set(StorageKey.Options, options)
         },
         onChange(e) {
-            this.value = parseInt(eventValue(e))
+            this.value = Math.max(0.1, parseInt(eventValue(e)))
             optionStorage.set(StorageKey.Options, options)
-        },
+        }
     },
     commaRest: {
         value: 100,
@@ -46,7 +47,7 @@ export const options: Options = {
         onChange(e) {
             this.value = parseInt(eventValue(e))
             optionStorage.set(StorageKey.Options, options)
-        },
+        }
     },
     fullStopRest: {
         value: 250,
@@ -61,7 +62,7 @@ export const options: Options = {
         onChange(e) {
             this.value = parseInt(eventValue(e))
             optionStorage.set(StorageKey.Options, options)
-        },
+        }
     },
     newLineRest: {
         value: 50,
@@ -76,7 +77,7 @@ export const options: Options = {
         onChange(e) {
             this.value = parseInt(eventValue(e))
             optionStorage.set(StorageKey.Options, options)
-        },
+        }
     },
     newParagraphRest: {
         value: 50,
@@ -91,7 +92,7 @@ export const options: Options = {
         onChange(e) {
             this.value = parseInt(eventValue(e))
             optionStorage.set(StorageKey.Options, options)
-        },
+        }
     },
     sectionLength: {
         value: 8,
@@ -106,22 +107,20 @@ export const options: Options = {
         onChange(e) {
             const newLineIndex = Math.floor(
                 (this.value * ticker.currentLine + ticker.currentWord - 1) /
-                    parseInt(eventValue(e)),
+                    parseInt(eventValue(e))
             )
-            console.log(
-                'wordIndex: ',
-                this.value * ticker.currentLine + ticker.currentWord - 1,
-            )
-            console.log('previous line index: ', ticker.currentLine)
-            console.log('new line index: ', newLineIndex)
+
             this.value = parseInt(eventValue(e))
             optionStorage.set(StorageKey.Options, options)
-            const { lines, paragraphs } = parse()
-            ticker.setData(lines, paragraphs)
+
+            if (!ticker.parentElement) return
+
+            const { lines, paragraphs, pTags } = parse(ticker.parentElement)
+            ticker.setData(lines, paragraphs, pTags, ticker.parentElement)
             ticker.pause()
 
             ticker.setLine(newLineIndex)
-        },
+        }
     },
     textColor: {
         value: '#3f3f3f',
@@ -140,7 +139,7 @@ export const options: Options = {
             this.value = eventValue(e)
             optionStorage.set(StorageKey.Options, options)
             updateCssVar(this.cssVar!, this.value)
-        },
+        }
     },
     highlightColor: {
         value: '#ffffff',
@@ -159,7 +158,7 @@ export const options: Options = {
             this.value = eventValue(e)
             optionStorage.set(StorageKey.Options, options)
             updateCssVar(this.cssVar!, this.value)
-        },
+        }
     },
     pauseOnNavigate: {
         value: true,
@@ -174,13 +173,35 @@ export const options: Options = {
         onChange(e) {
             this.value = eventChecked(e)
             optionStorage.set(StorageKey.Options, options)
-        },
+        }
     },
+    hideInstructions: {
+        value: true,
+        get default() {
+            return false
+        },
+        type: 'boolean',
+        reset() {
+            this.value = this.default
+            optionStorage.set(StorageKey.Options, options)
+            const instructions = document.getElementById('lexia-instructions')
+
+            instructions?.classList.remove('hide')
+        },
+        onChange(e) {
+            this.value = eventChecked(e)
+
+            const instructions = document.getElementById('lexia-instructions')
+            if (this.value) instructions?.classList.add('hide')
+            else instructions?.classList.remove('hide')
+            optionStorage.set(StorageKey.Options, options)
+        }
+    }
 }
 
 enum StorageKey {
     Options = 'lexia-options',
-    ColorOptions = 'lexia-color-options',
+    ColorOptions = 'lexia-color-options'
 }
 
 let optionStorage: Storage | AsyncStorage = storage()
@@ -201,7 +222,7 @@ export async function assignDefaults() {
         options[keyT].value = storedOptions[keyT].value
 
         const input = document.getElementById(
-            `lexia-option-${keyT}`,
+            `lexia-option-${keyT}`
         ) as HTMLInputElement
         if (input) {
             const option = options[keyT]
@@ -227,9 +248,9 @@ export function resetDefault(key: keyof typeof options) {
     options[key].reset()
 
     const input = document.getElementById(
-        `lexia-option-${key}`,
+        `lexia-option-${key}`
     ) as HTMLInputElement
-    typeof options[key].type === 'boolean'
+    options[key].type === 'boolean'
         ? (input.checked = options[key].default as boolean)
         : (input.value = options[key].default.toString())
 }

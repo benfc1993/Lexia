@@ -11,5 +11,14 @@
     "background": {
         "service_worker": "extension/background.js"
     },
+    "commands": {
+        "lexia": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+K",
+                "mac": "Command+Shift+K"
+            },
+            "description": "Start \"Lexia\" selection on the current page."
+        }
+    },
     "permissions": ["tabs", "activeTab", "scripting", "storage"]
 }
