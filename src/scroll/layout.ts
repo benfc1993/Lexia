@@ -127,6 +127,7 @@ function createOptionInput(key: keyof typeof options, option: Option) {
     input.addEventListener('change', option.onChange.bind(options[key]))
 
     const resetButton = document.createElement('button')
+    resetButton.classList.add('lexia-scroll-options__reset')
     resetButton.innerText = '↺'
     resetButton.onclick = (_e: MouseEvent) => resetDefault(key)
 

@@ -55,7 +55,7 @@
 
 .lexia-scroll-container {
     background: #222;
-    width: 30%;
+    width: 60%;
     height: 3rem;
     padding: 0 3rem;
     display: flex;
@@ -185,4 +185,12 @@
 
 .lexia-scroll-options__input[type='color'] {
     padding: 0;
+}
+
+.lexia-scroll-options__reset {
+    padding: 5px;
+    background: rgb(107 107 107);
+    color: #fff;
+    border-radius: 3px;
+    margin-left: 5px;
 }
