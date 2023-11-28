@@ -3,7 +3,7 @@ import { assignDefaults, options, setStorageMethod } from './data'
 import { createLayout } from './layout'
 import { loop } from './loop'
 import { ticker } from './ticker'
-import { Line } from './types'
+import type { Line } from './types'
 import { initialiseUserInput } from './userInput'
 
 export function quit() {
@@ -11,28 +11,45 @@ export function quit() {
     const overlay = document.getElementById('lexia-scroll-overlay')
     if (overlay) overlay.remove()
 }
-export const startScroll = (storage: Storage | AsyncStorage) => {
+export const startScroll = async (storage: Storage | AsyncStorage) => {
     setStorageMethod(storage)
-    assignDefaults()
+    await assignDefaults()
     createLayout()
-    const tags = document.getElementsByTagName('p')
-    if (!tags) return
-    const lines: Line[] = []
-    let paragraphIndex = 0
-    let paragraphs: number[] = []
+    const { lines, paragraphs } = parse()
 
-    for (const tag of tags) {
-        const sections = splitWords(paragraphs.length, tag.innerText)
-        paragraphs.push(paragraphIndex)
-        lines.push(...sections)
-
-        paragraphIndex += sections.length
-    }
     initialiseUserInput()
     loop(lines, paragraphs)
 }
 
-function splitWords(paragraphIndex: number, str: string): Line[] {
+export function parse() {
+    console.log(options.sectionLength)
+    const tags = document.getElementsByTagName('p')
+    if (!tags) return { lines: [], paragraphs: [] }
+    const lines: Line[] = []
+    let paragraphIndex = 0
+    let paragraphs: number[] = []
+    let wordIndex = 0
+
+    for (const tag of tags) {
+        const { wordCount, sections } = splitWords(
+            wordIndex,
+            paragraphs.length,
+            tag.innerText,
+        )
+        paragraphs.push(paragraphIndex)
+        lines.push(...sections)
+        wordIndex += wordCount
+        paragraphIndex += sections.length
+    }
+
+    return { lines, paragraphs }
+}
+
+function splitWords(
+    wordIndex: number,
+    paragraphIndex: number,
+    str: string,
+): { wordCount: number; sections: Line[] } {
     const sections: Line[] = []
     const words = str
         .replace(/\<br\>/g, ' ')
@@ -49,7 +66,8 @@ function splitWords(paragraphIndex: number, str: string): Line[] {
         ) {
             sections.push({
                 count: j,
-                html: `<span class="lexia-word">${section}</span>`,
+                wordCountStart: wordIndex + i,
+                html: `${section}</span>`,
                 paragraph: paragraphIndex,
             })
             section = ''
@@ -63,8 +81,9 @@ function splitWords(paragraphIndex: number, str: string): Line[] {
     }
     sections.push({
         count: j,
-        html: `<span class="lexia-paragraph">${section}</span>`,
+        wordCountStart: wordIndex + words.length - j,
+        html: `<span class="lexia-paragraph">${section}</span></span>`,
         paragraph: paragraphIndex,
     })
-    return sections
+    return { wordCount: words.length, sections }
 }

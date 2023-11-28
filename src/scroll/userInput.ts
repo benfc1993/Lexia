@@ -6,7 +6,7 @@ export function initialiseUserInput() {
         switch (e.key) {
             case ' ':
                 e.preventDefault()
-                ticker.pause()
+                ticker.togglePause()
                 break
             case 'o':
             case 'O':

@@ -1,6 +1,8 @@
 import { storage } from '../storage/localStorage'
 import { Storage, AsyncStorage } from '../storage/types'
 import { eventChecked, eventValue } from '../utils/htmlHelpers'
+import { parse } from './parse'
+import { ticker } from './ticker'
 import { BooleanOption, NumberOption, StringOption } from './types'
 
 type Options = {
@@ -102,8 +104,23 @@ export const options: Options = {
             optionStorage.set(StorageKey.Options, options)
         },
         onChange(e) {
+            const newLineIndex = Math.floor(
+                (this.value * ticker.currentLine + ticker.currentWord - 1) /
+                    parseInt(eventValue(e)),
+            )
+            console.log(
+                'wordIndex: ',
+                this.value * ticker.currentLine + ticker.currentWord - 1,
+            )
+            console.log('previous line index: ', ticker.currentLine)
+            console.log('new line index: ', newLineIndex)
             this.value = parseInt(eventValue(e))
             optionStorage.set(StorageKey.Options, options)
+            const { lines, paragraphs } = parse()
+            ticker.setData(lines, paragraphs)
+            ticker.pause()
+
+            ticker.setLine(newLineIndex)
         },
     },
     textColor: {

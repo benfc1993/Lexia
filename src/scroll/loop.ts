@@ -9,9 +9,9 @@ export function loop(lines: Line[], paragraphs: number[]) {
     if (!scrollSlide) return
 
     ticker.setData(
-        document.getElementById('lexia-scroll-slide')!,
         lines,
         paragraphs,
+        document.getElementById('lexia-scroll-slide')!,
     )
 
     ticker.setLine(0)

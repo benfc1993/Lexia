@@ -12,11 +12,12 @@ export interface Ticker {
     containerElement: HTMLElement | null
     tick: () => void
     setData: (
-        containerElement: HTMLElement,
         lines: Line[],
         paragraphs: number[],
+        containerElement?: HTMLElement,
     ) => void
     pause: () => void
+    togglePause: () => void
     jumpLine: (dir: 1 | -1) => void
     jumpParagraph: (dir: 1 | -1) => void
     setLine: (lineIndex: number, rest?: number) => void
@@ -32,13 +33,13 @@ export const ticker: Ticker = {
     paragraphs: [],
     containerElement: null,
     setData(
-        containerElement: HTMLElement,
         lines: Line[],
         paragraphs: number[],
+        containerElement?: HTMLElement,
     ) {
         this.lines = lines
         this.paragraphs = paragraphs
-        this.containerElement = containerElement
+        this.containerElement = containerElement ?? this.containerElement
         this.paused = false
         this.currentWord = 0
         this.currentLine = 0
@@ -68,11 +69,15 @@ export const ticker: Ticker = {
         requestAnimationFrame(this.tick.bind(this))
     },
     pause() {
+        this.paused = true
+        document.getElementById('lexia-scroll-pause')?.classList.add('show')
+    },
+    togglePause() {
         this.paused = !this.paused
         document.getElementById('lexia-scroll-pause')?.classList.toggle('show')
     },
     jumpLine(dir: 1 | -1) {
-        if (!this.paused && options.pauseOnNavigate.value) this.pause()
+        if (options.pauseOnNavigate.value) this.pause()
         const jump = Math.max(
             0,
             Math.min(this.currentLine + dir, ticker.lines.length - 1),
@@ -89,7 +94,7 @@ export const ticker: Ticker = {
             ),
         )
         let jump = this.paragraphs[paragraphIndex]
-        if (!this.paused && options.pauseOnNavigate.value) this.pause()
+        if (options.pauseOnNavigate.value) this.pause()
         this.setLine(jump, options.newParagraphRest.value)
     },
     setLine(lineIndex: number, rest: number = options.newLineRest.value) {
